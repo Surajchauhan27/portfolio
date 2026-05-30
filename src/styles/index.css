@@ -8,6 +8,9 @@ body {
   cursor: none;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
+  /* Prevent horizontal overflow on mobile */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 @media (pointer: coarse) { body { cursor: auto; } }
 
@@ -305,10 +308,25 @@ body::after {
   box-shadow: 0 0 0 3px rgba(34,211,238,.08), 0 0 20px rgba(34,211,238,.08);
 }
 
-/* ── Responsive helpers ────────────────────────────────────── */
+/* ── Responsive helpers ──────────────────────────────────── */
 @media (max-width: 640px) {
   .tilt { transform: none !important; }
   .cursor-dot, .cursor-ring { display: none; }
+  /* Disable heavy fixed-position overlays on mobile */
+  .data-stream-col { display: none !important; }
+  .orb { display: none !important; }
+  /* Prevent .s3d 3D transforms causing overflow on narrow screens */
+  .s3d { transform: none !important; will-change: auto; }
+  /* Disable scanline animation on mobile */
+  body::before { animation: none !important; }
+  /* Stop float badges animating on mobile (causes repaints) */
+  .float-badge, .float-badge-2 { animation: none !important; }
+  /* Ensure text never overflows */
+  h1, h2, h3 { overflow-wrap: break-word; word-break: break-word; }
+  /* Hide floating hero badges that overflow on small screens */
+  .hero-float-badge { display: none !important; }
+  /* Fix any rogue overflows */
+  section, main, div { max-width: 100vw; }
 }
 
 /* ── Hero section grid lines ───────────────────────────────── */

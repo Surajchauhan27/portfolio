@@ -18,7 +18,10 @@ import ParticleCanvas from './components/ParticleCanvas';
 import { useScrollReveal, useTilt, useCursor, useScrollParallax, useMagneticButtons } from './hooks/useEffects';
 import { PERSONAL } from './data/config';
 
-/* ── Data stream background ─────────────────────────────────── */
+/* Detect touch/mobile devices — used to skip heavy GPU effects */
+const IS_MOBILE = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+
+/* ── Data stream background — desktop only ──────────────────── */
 const DATA_CHARS = '01アイウエオカキクケコABCDEF9876543210░▒▓';
 const STREAM_COLS = [
   { left: '3%',   delay: '0s',   dur: '14s', chars: 18 },
@@ -30,6 +33,7 @@ const STREAM_COLS = [
 ];
 
 const DataStream = memo(function DataStream() {
+  if (IS_MOBILE) return null; // skip on mobile for performance
   return (
     <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
       {STREAM_COLS.map((col, i) => (
@@ -84,8 +88,9 @@ class ErrorBoundary extends Component {
   }
 }
 
-/* ── Ambient orbs ───────────────────────────────────────────── */
+/* ── Ambient orbs — desktop only ────────────────────────────── */
 const AmbientOrbs = memo(function AmbientOrbs() {
+  if (IS_MOBILE) return null; // skip on mobile for performance
   return (
     <>
       <div className="orb w-[800px] h-[800px] -top-60 -left-60"
@@ -103,13 +108,16 @@ const AmbientOrbs = memo(function AmbientOrbs() {
 /* ── PortfolioApp ───────────────────────────────────────────── */
 function PortfolioApp() {
   useScrollReveal();
+  // All hooks called unconditionally (React rules) — each one checks IS_MOBILE internally
   useTilt();
   useCursor();
   useScrollParallax();
   useMagneticButtons();
 
   useEffect(() => {
-    // Initialize Lenis smooth scroll
+    // Lenis smooth scroll — disabled on mobile (native scroll is smoother)
+    if (IS_MOBILE) return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -117,21 +125,23 @@ function PortfolioApp() {
       touchMultiplier: 1.5,
     });
 
+    let rafId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);
 
   return (
     <div className="relative">
-      <ParticleCanvas />
+      {/* Particles only on desktop — heavy canvas on mobile kills FPS */}
+      {!IS_MOBILE && <ParticleCanvas />}
       <DataStream />
       <AmbientOrbs />
 

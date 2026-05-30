@@ -37,14 +37,16 @@ export default function ContactSection() {
       PUBLIC_KEY  && !PUBLIC_KEY.includes('your_');
 
     if (!keysReady) {
-      /* Fallback: open email client with message pre-filled */
+      /* Fallback: open email client with ALL form data pre-filled */
       const subject = encodeURIComponent(form.subject || `Portfolio message from ${form.name}`);
-      const body    = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`);
-      window.open(`mailto:${PERSONAL.email}?subject=${subject}&body=${body}`, '_blank');
+      const body    = encodeURIComponent(
+        `Hi Suraj,\n\n${form.message}\n\n---\nFrom: ${form.name}\nEmail: ${form.email}`
+      );
+      window.location.href = `mailto:${PERSONAL.email}?subject=${subject}&body=${body}`;
       setSending(false);
       setSubmitted(true);
-      // ✅ FIXED: safeTimeout instead of raw setTimeout
-      safeTimeout(() => setSubmitted(false), 6000);
+      setForm({ name: '', email: '', subject: '', message: '' });
+      safeTimeout(() => setSubmitted(false), 8000);
       return;
     }
 
@@ -59,11 +61,17 @@ export default function ContactSection() {
 
       setSubmitted(true);
       setForm({ name: '', email: '', subject: '', message: '' });
-      safeTimeout(() => setSubmitted(false), 6000); // ✅ FIXED
+      safeTimeout(() => setSubmitted(false), 6000);
     } catch (err) {
       console.error('[ContactSection] EmailJS send failed:', err);
-      setError(true);
-      safeTimeout(() => setError(false), 5000); // ✅ FIXED
+      /* EmailJS failed — fall back to mailto */
+      const subject = encodeURIComponent(form.subject || `Portfolio message from ${form.name}`);
+      const body    = encodeURIComponent(
+        `Hi Suraj,\n\n${form.message}\n\n---\nFrom: ${form.name}\nEmail: ${form.email}`
+      );
+      window.location.href = `mailto:${PERSONAL.email}?subject=${subject}&body=${body}`;
+      setSubmitted(true);
+      safeTimeout(() => setSubmitted(false), 8000);
     } finally {
       setSending(false);
     }
@@ -131,8 +139,8 @@ export default function ContactSection() {
             <div className="mb-6 p-4 rounded-2xl flex items-center gap-3 bg-cyan-500/10 border border-cyan-500/20">
               <CheckCircle size={20} className="text-cyan-400 flex-shrink-0" />
               <div>
-                <p className="text-sm font-bold text-cyan-400">Message ready! 🎉</p>
-                <p className="text-xs text-cyan-400/60 mt-0.5">Your email client opened — just hit Send and I'll reply within 24 hours.</p>
+                <p className="text-sm font-bold text-cyan-400">Email client opened! 🎉</p>
+                <p className="text-xs text-cyan-400/60 mt-0.5">Your message is pre-filled — just click <strong>Send</strong> in your email app and I'll reply within 24 hours.</p>
               </div>
             </div>
           )}

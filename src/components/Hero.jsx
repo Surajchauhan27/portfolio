@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { PERSONAL, ROLES, STATS } from '../data/config';
 
-/* ── Floating badges — static, memoized ─────────────────────── */
+/* ── Floating badges — hidden on mobile to prevent overflow ── */
 const floatingBadges = [
   { label: '📊 Power BI', style: { top: '18%', right: '6%' }, cls: 'float-badge'   },
   { label: '🐍 Python',   style: { top: '52%', right: '4%' }, cls: 'float-badge-2' },

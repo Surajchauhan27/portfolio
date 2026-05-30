@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+const IS_MOBILE = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+
 /* ─────────────────────────────────────────────────────────────
  * useScrollReveal
  * Observes all .sr elements and adds .in class when visible.
@@ -118,6 +120,8 @@ export function useTilt() {
  * ───────────────────────────────────────────────────────────── */
 export function useCursor() {
   useEffect(() => {
+    // Skip on touch devices — they have no cursor
+    if (IS_MOBILE) return;
     const dot  = document.querySelector('.cursor-dot');
     const ring = document.querySelector('.cursor-ring');
     if (!dot || !ring) return;
@@ -238,7 +242,8 @@ export function useSafeTimeout() {
  * ───────────────────────────────────────────────────────────── */
 export function useScrollParallax() {
   useEffect(() => {
-    const MAX_DEG    = 4;      // max tilt in degrees
+    // Skip on mobile — rAF loop on every scroll causes visible jank
+    if (IS_MOBILE) return;
     const DEPTH      = 0.04;   // scale shrink at edges
     const PERSPECTIVE = 1200;  // px perspective depth
 
@@ -274,7 +279,8 @@ export function useScrollParallax() {
  * ───────────────────────────────────────────────────────────── */
 export function useMagneticButtons() {
   useEffect(() => {
-    const RADIUS   = 80;  // px — attraction zone
+    // Skip on mobile — no mouse to be magnetic for
+    if (IS_MOBILE) return;
     const STRENGTH = 0.35; // how far the button moves (0-1)
 
     const buttons = document.querySelectorAll('.magnetic');
