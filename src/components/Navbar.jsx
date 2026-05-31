@@ -7,10 +7,12 @@ export default function Navbar() {
   const [active, setActive]     = useState('');
   const [progress, setProgress] = useState(0);
 
-  // ✅ Lazy import — jsPDF (158KB) only loaded when user clicks
-  const handleResume = useCallback(async () => {
-    const { generateResumePDF } = await import('../utils/generateResume');
-    generateResumePDF();
+  // ✅ Direct PDF download from public folder
+  const handleResume = useCallback(() => {
+    const link = document.createElement('a');
+    link.href = '/resume.pdf';
+    link.download = 'Suraj_Chauhan_Resume.pdf';
+    link.click();
   }, []);
 
   // ✅ Cache section offsets — avoid querySelectorAll on every scroll tick

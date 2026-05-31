@@ -156,13 +156,12 @@ export default function HeroSection() {
     return () => clearTimeout(timeout);
   }, []);
 
-  /* ── Lazy load Resume PDF only on click ─────────────────────
-   * Before: import { generateResumePDF } at top → jsPDF (158KB) + html2canvas (201KB) loaded eagerly
-   * After: dynamic import on click → never loaded unless user wants it
-   */
-  const handleResumeClick = useCallback(async () => {
-    const { generateResumePDF } = await import('../utils/generateResume');
-    generateResumePDF();
+  /* ── Download real resume PDF from public folder ───────────── */
+  const handleResumeClick = useCallback(() => {
+    const link = document.createElement('a');
+    link.href = '/resume.pdf';
+    link.download = 'Suraj_Chauhan_Resume.pdf';
+    link.click();
   }, []);
 
   return (
