@@ -153,11 +153,11 @@ function PortfolioApp() {
         aria-label={`${PERSONAL.name} Portfolio`}
       >
         <Navbar />
-        <div className="s3d"><Hero /></div>
+        <Hero />
         <MarqueeBar />
         <div className="s3d"><About /></div>
         <div className="s3d"><SkillsSection /></div>
-        <div className="s3d"><ProjectsSection /></div>
+        <ProjectsSection />
         <div className="s3d"><Experience /></div>
         <div className="s3d"><Achievements /></div>
         <div className="s3d"><Certifications /></div>

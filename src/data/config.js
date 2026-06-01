@@ -92,7 +92,7 @@ export const PROJECTS = [
     featured: true,
     accent: '#7c3aed',
     emoji: '🎬',
-    image: 'https://images.unsplash.com/photo-1574375927938-d5a98e8edd86?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?q=80&w=1000&auto=format&fit=crop',
   },
   {
     num: '03',

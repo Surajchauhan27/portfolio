@@ -598,3 +598,35 @@ body::before {
 @keyframes float2 { 0%,100% { transform: translateY(-8px) rotate(1deg);  } 50% { transform: translateY(4px)  rotate(-1deg); } }
 
 
+/* ════════════════════════════════════════════════════════════
+   TOONHUB CAROUSEL — Projects Section
+   ════════════════════════════════════════════════════════════ */
+
+/* Dot indicator pill */
+.toon-dot {
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: width 400ms cubic-bezier(0.4,0,0.2,1), background 400ms;
+}
+
+/* Card entry shimmer on center focus */
+@keyframes cardShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Center card glow pulse */
+@keyframes centerGlow {
+  0%,100% { box-shadow: 0 0 40px rgba(0,0,0,0.4); }
+  50%      { box-shadow: 0 0 80px rgba(0,0,0,0.6); }
+}
+
+/* Prevent overflow on the carousel stage */
+#projects { overflow-x: hidden; }
+
+/* Ensure Anton font is available for ghost text in projects */
+#projects .ghost-text {
+  font-family: 'Anton', sans-serif;
+}
